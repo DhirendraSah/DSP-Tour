@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    tools:context=".ProfileActivity">
+
+    <!-- Main content -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lavender_light"
+            app:layout_collapseMode="pin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:title="DSP TOUR"
+            app:titleTextColor="@color/lavender_dark" />
+
+        <!-- Profile Image -->
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="center"
+            android:background="@drawable/circle_background"
+            android:contentDescription="@string/profile_image"
+            android:src="@drawable/profile"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:onClick="selectProfileImage"/>
+
+        <!-- Name -->
+        <EditText
+            android:id="@+id/editName"
+            android:layout_width="0dp"
+            android:layout_marginTop="30dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_your_name"
+            android:padding="16dp"
+            android:inputType="textPersonName"
+            android:background="@drawable/input_field_background"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:autofillHints="name"
+            app:layout_constraintTop_toBottomOf="@id/profileImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="24dp"/>
+
+        <!-- Age -->
+        <EditText
+            android:id="@+id/editAge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_your_age"
+            android:padding="16dp"
+            android:autofillHints="age"
+            android:inputType="number"
+            android:background="@drawable/input_field_background"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/editName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="24dp"/>
+
+        <!-- Address -->
+        <EditText
+            android:id="@+id/editAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_your_address"
+            android:padding="16dp"
+            android:autofillHints="postalAddress"
+            android:inputType="textPostalAddress"
+            android:background="@drawable/input_field_background"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/editAge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="24dp"/>
+
+        <!-- Contact -->
+        <EditText
+            android:id="@+id/editContact"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_your_contact"
+            android:padding="16dp"
+            android:autofillHints="phone"
+            android:inputType="phone"
+            android:background="@drawable/input_field_background"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/editAddress"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="24dp"/>
+
+        <!-- Bio -->
+        <EditText
+            android:id="@+id/editBio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/tell_us_about_yourself_bio"
+            android:padding="16dp"
+            android:autofillHints="bio"
+            android:inputType="textMultiLine"
+            android:background="@drawable/input_field_background"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:minLines="3"
+            app:layout_constraintTop_toBottomOf="@id/editContact"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="24dp"/>
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btnSaveProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/editBio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Navigation drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/lavender_light"
+        app:headerLayout="@layout/nav_header"
+        app:itemBackground="@drawable/background"
+        app:itemIconPadding="10dp"
+        app:itemTextColor="@color/lavender_dark"
+        app:menu="@menu/menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/lavender_light">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:background="@drawable/card_background"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="40dp"
+            android:elevation="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/aclonica"
+                android:text="@string/dsptour"
+                android:textColor="#2196F3"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Register"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="#DC061516"
+                android:layout_marginBottom="24dp"
+                android:gravity="center"/>
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:hint="@string/Username"
+                android:autofillHints="emailAddress"
+                android:inputType="text"
+                android:textColor="#C8161515"
+                android:background="@drawable/edit_text_background2"
+                android:layout_marginBottom="10dp"
+                android:padding="12dp"
+                android:textColorHint="#BDBDBD"/>
+
+            <EditText
+                android:id="@+id/Email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:hint="@string/Email"
+                android:autofillHints="emailAddress"
+                android:inputType="textEmailAddress"
+                android:textColor="#C8161515"
+                android:background="@drawable/edit_text_background2"
+                android:layout_marginBottom="10dp"
+                android:padding="12dp"
+                android:textColorHint="#BDBDBD"/>
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Password"
+                android:autofillHints="password"
+                android:inputType="textPassword"
+                android:textColor="#0B0101"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:background="@drawable/edit_text_background2"
+                android:layout_marginBottom="20dp"
+                android:padding="12dp"
+                android:textColorHint="#BDBDBD"/>
+
+            <EditText
+                android:id="@+id/Contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Contact"
+                android:autofillHints="phone"
+                android:inputType="number"
+                android:textColor="#C8161515"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:background="@drawable/edit_text_background2"
+                android:layout_marginBottom="20dp"
+                android:padding="12dp"
+                android:textColorHint="#BDBDBD"/>
+
+            <Button
+                android:id="@+id/register_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="#A95A7311"
+                android:text="@string/register"
+                android:textColor="#FFFFFF"
+                android:minHeight="48dp"/>
+
+            <TextView
+                android:id="@+id/signup_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/SignIn"
+                android:textColor="#000000"
+                android:gravity="center"/>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,107 @@
+<resources>
+    <string name="app_name">DSP TOUR</string>
+    <string name="splash">DSP TOUR</string>
+    <string name="dsptour">DSP TOUR</string>
+    <string name="Login">Let\s Login Here</string>
+    <string name="Email">Email</string>
+    <string name="Username">Username</string>
+    <string name="Password">Password</string>
+    <string name="Contact">Contact</string>
+    <string name="login">LOGIN</string>
+    <string name="register">REGISTER</string>
+    <string name="ForgotPassword"><a href="">Forgot Password?</a></string>
+    <string name="SignUp"><a href="">If you don\'t have an Account Sign Up?</a></string>
+    <string name="SignIn"><a href="">If you have an Account Sign In?</a></string>
+    <string name="Register">Let\s Register Here</string>
+
+    <string name="Home">Home</string>
+    <string name="City">Cities</string>
+    <string name="Temple">Temples</string>
+    <string name="Park">Parks</string>
+    <string name="Setting">Settings</string>
+    <string name="Share">Share</string>
+    <string name="logout">Logout</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="city_activity_content">City Activity Content</string>
+    <string name="temple_activity_content">Temple Activity Content</string>
+    <string name="park_activity_content">Park Activity Content</string>
+
+
+    <string name="explore_our_nepal_with_your_beautiful_journey">Explore Our Nepal With Your Beautiful Journey</string>
+    <string name="kathmandu">Kathmandu</string>
+    <string name="price_100">Price: Rs.1500</string>
+    <string name="book_now">Book Now</string>
+    <string name="pashupatinath_temple">Pashupatinath Temple</string>
+    <string name="price_50">Price: Rs.3000</string>
+    <string name="book_now2">Book Now</string>
+    <string name="chitwan_national_park">Chitwan National Park</string>
+    <string name="price_75">Price: Rs.2000</string>
+    <string name="book_now3">Book Now</string>
+    <string name="date">Date: </string>
+    <string name="meeting_point">Meeting Point: </string>
+    <string name="indra_chowck">Indra Chowck</string>
+    <string name="thamel">Thamel</string>
+    <string name="kopan_monastery">Kopan Monastery</string>
+    <string name="durbar_squares">Durbar Squares</string>
+    <string name="pokhara">Pokhara</string>
+    <string name="price_120">Rs.3000</string>
+    <string name="book_now4">book_now4</string>
+    <string name="bhaktapur_durbar_square">bhaktapur</string>
+    <string name="price_90">Rs.2000</string>
+    <string name="book_now5">book_now5</string>
+    <string name="sagarmatha_national_park">sagarmatha</string>
+    <string name="price_130">Rs,3000</string>
+    <string name="book_now6">book_now6</string>
+    <string name="swayambhunath_temple">Swayambhunath Temple</string>
+    <string name="boudhanath_stupa">Boudhanath Stupa</string>
+    <string name="mustang">Mustang</string>
+    <string name="Lalitpur">Lalitpur</string>
+    <string name="Khaptad">Khaptad National Park</string>
+    <string name="Rara">Rara National Park</string>
+    <string name="Profile">Edit Profile</string>
+    <string name="Order">Orders</string>
+    <string name="Payment">Payment</string>
+    <string name="language">Languages</string>
+    <string name="username">Username</string>
+    <string name="edit_personal_details">Edit personal details</string>
+    <string name="orders">Orders</string>
+    <string name="payment">Payment</string>
+    <string name="languages">Languages</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="enter_your_name">Enter your Name</string>
+    <string name="enter_your_age">Enter your Age</string>
+    <string name="enter_your_address">Enter your Address</string>
+    <string name="enter_your_contact">Enter your Contact</string>
+    <string name="tell_us_about_yourself_bio">Tell us about yourself (Bio)</string>
+    <string name="save">Save</string>
+    <string name="booking_confirmation_details">Booking Confirmation Details</string>
+    <string name="destination">Destination</string>
+    <string name="price">Price</string>
+    <string name="select_date">Select Date</string>
+    <string name="enter_date">Enter Date</string>
+    <string name="meeting_point2">Meeting Point</string>
+    <string name="indra_chowk">Indra Chowk</string>
+    <string name="confirm">Confirm</string>
+    <string name="payments">Payments</string>
+    <string name="order_amount">Order amount</string>
+    <string name="_0000">0000</string>
+    <string name="payment_mode">Payment Mode</string>
+    <string name="paytm">Paytm</string>
+    <string name="phone_pay">Phone pay</string>
+    <string name="google_pay">Google pay</string>
+    <string name="cash_on_meet">Cash on Meet</string>
+    <string name="khalti">Khalti</string>
+    <string name="pay">SUBMIT</string>
+    <string name="choose_your_preferred_language">Choose your preferred language</string>
+    <string name="english">English</string>
+    <string name="nepali">Nepali</string>
+    <string name="hindi">Hindi</string>
+    <string name="save_language">Save Language</string>
+    <string name="your_order_details">Your Order Details</string>
+    <string name="back">Back</string>
+
+
+
+</resources>

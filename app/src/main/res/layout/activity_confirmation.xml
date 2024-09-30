@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:openDrawer="start"
+    tools:context=".ConfirmationActivity">
+
+    <!-- Main content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lavender_light"
+            app:titleTextColor="@color/lavender_dark"
+            app:title="Confirmation" />
+
+        <!-- Scrollable Content -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <!-- Vertical LinearLayout to hold content -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Booking Confirmation Details -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/booking_confirmation_details"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:textColor="@color/lavender_dark" />
+
+                <!-- Destination and Price -->
+                <TextView
+                    android:id="@+id/text_destination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/destination"
+                    android:textSize="22sp"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/price"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorAccent"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Date Input -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_date"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/date_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:minWidth="48dp"
+                    android:hint="@string/enter_date"
+                    android:inputType="date"
+                    android:padding="12dp"
+                    android:background="@drawable/edit_text_background"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Meeting Point -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/meeting_point2"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="8dp"/>
+
+                <RadioGroup
+                    android:id="@+id/meeting_point_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp">
+
+                    <RadioButton
+                        android:id="@+id/radio_indra_chowk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/indra_chowk"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:padding="8dp"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_thamel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/thamel"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:padding="8dp"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_kopan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/kopan_monastery"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:padding="8dp"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_durbar_square"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/durbar_squares"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:padding="8dp"/>
+                </RadioGroup>
+
+                <!-- Confirm Button -->
+                <Button
+                    android:id="@+id/confirm_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/confirm"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:background="@color/colorPrimary"
+                    android:padding="16dp"
+                    android:layout_marginTop="16dp"/>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- Navigation drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/lavender_light"
+        app:headerLayout="@layout/nav_header"
+        app:itemBackground="@drawable/background"
+        app:itemIconPadding="10dp"
+        app:itemTextColor="@color/lavender_dark"
+        app:menu="@menu/menu" />
+</androidx.drawerlayout.widget.DrawerLayout>

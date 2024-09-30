@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "169779134485",
+    "project_id": "dsp-tour-d1f14",
+    "storage_bucket": "dsp-tour-d1f14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169779134485:android:d647885db5643c399d0e1c",
+        "android_client_info": {
+          "package_name": "com.example.dsptour"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6CuDgw7pDA50pOkaWYuFsNDNbUCmNXDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
