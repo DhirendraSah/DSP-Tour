@@ -2,47 +2,41 @@ package com.example.dsptour
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
-import androidx.appcompat.app.ActionBarDrawerToggle
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 
 class CityActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var placeAdapter: PlaceAdapter2
+    private val cityPlaceList = mutableListOf<Place2>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()  // Enable edge-to-edge layout
         setContentView(R.layout.activity_city)
 
-        // Set up the Toolbar
+        // Initialize Toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // Set up edge-to-edge insets handling
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_layout)) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-        // Set up the DrawerLayout
+        // Initialize DrawerLayout and NavigationView
         drawerLayout = findViewById(R.id.drawer_layout)
-
-        // Set up the NavigationView
         navigationView = findViewById(R.id.nav_view)
 
-        // Set up the Drawer toggle (hamburger icon) to open/close the drawer
+        // Set up Drawer toggle (hamburger icon)
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar,
             R.string.navigation_drawer_open, R.string.navigation_drawer_close
@@ -50,28 +44,25 @@ class CityActivity : AppCompatActivity() {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        // "Book Now" button clicks
-        findViewById<Button>(R.id.book_city).setOnClickListener {
-            navigateToConfirmation("Kathmandu", "100")
+        // Set up RecyclerView
+        recyclerView = findViewById(R.id.recycler_view)
+        placeAdapter = PlaceAdapter2(cityPlaceList) { place, action ->
+            handlePlaceAction(place, action)
         }
-        findViewById<Button>(R.id.book_city2).setOnClickListener {
-            navigateToConfirmation("Pokhara", "100")
-        }
-        findViewById<Button>(R.id.book_city3).setOnClickListener {
-            navigateToConfirmation("Mustang", "120")
-        }
-        findViewById<Button>(R.id.book_city4).setOnClickListener {
-            navigateToConfirmation("Lalitpur", "100")
-        }
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = placeAdapter
 
-        // Handle menu item clicks in NavigationView
+        // Load city places from Firestore
+        loadCityPlacesFromFirestore()
+
+        // Handle navigation view item clicks
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> {
                     startActivity(Intent(this, HomeActivity::class.java))
                 }
                 R.id.City -> {
-                    // Stay on CityActivity
+                    Toast.makeText(this, "Already in City", Toast.LENGTH_SHORT).show()
                 }
                 R.id.Temple -> {
                     startActivity(Intent(this, TempleActivity::class.java))
@@ -83,7 +74,8 @@ class CityActivity : AppCompatActivity() {
                     startActivity(Intent(this, SettingActivity::class.java))
                 }
                 R.id.Share -> {
-                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                    val shareIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
                         putExtra(Intent.EXTRA_TEXT, "Check out this amazing app!")
                         type = "text/plain"
                     }
@@ -91,7 +83,7 @@ class CityActivity : AppCompatActivity() {
                 }
                 R.id.logout -> {
                     startActivity(Intent(this, MainActivity::class.java))
-                    finish()  // Optional: finish CityActivity so it's removed from the back stack
+                    finish()
                 }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -104,16 +96,65 @@ class CityActivity : AppCompatActivity() {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START)
                 } else {
-                    finish()  // or use `super.onBackPressed()` if you want the default behavior
+                    finish()
                 }
             }
         })
     }
 
-    private fun navigateToConfirmation(destination: String, price: String) {
-        val intent = Intent(this, ConfirmationActivity::class.java)
-        intent.putExtra("destination", destination)
-        intent.putExtra("price", price)
-        startActivity(intent)
+    // Function to load city places from Firestore
+    private fun loadCityPlacesFromFirestore() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("places")
+            .whereEqualTo("category", "City") // Fetch only City category
+            .get()
+            .addOnSuccessListener { result ->
+                cityPlaceList.clear()
+                for (document in result) {
+                    val place = document.toObject<Place2>()
+                    cityPlaceList.add(place)
+                }
+                placeAdapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { e ->
+                Log.e("CityActivity", "Error loading city places", e)
+                Toast.makeText(this, "Failed to load city places", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun handlePlaceAction(place: Place2, actionType: PlaceAdapter2.ActionType) {
+        when (actionType) {
+            PlaceAdapter2.ActionType.LIKE -> {
+                // Increment and display like count
+                //toggleLike(place)
+
+            }
+
+            PlaceAdapter2.ActionType.COMMENT -> {
+
+                // openCommentDialog(place)
+
+            }
+
+            PlaceAdapter2.ActionType.SHARE -> {
+                val shareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, "Check out ${place.name} at ${place.location}")
+                    type = "text/plain"
+                }
+                startActivity(Intent.createChooser(shareIntent, "Share ${place.name}"))
+            }
+
+            PlaceAdapter2.ActionType.BOOK -> {
+                val intent = Intent(this, ConfirmationActivity::class.java).apply {
+                    putExtra("PLACE_NAME", place.name)
+                    putExtra("PLACE_PRICE", place.price)
+                    putExtra("PLACE_IMAGE",place.imageUri)
+                }
+                startActivity(intent)
+            }
+
+            PlaceAdapter2.ActionType.LOCATION -> TODO()
+        }
     }
 }

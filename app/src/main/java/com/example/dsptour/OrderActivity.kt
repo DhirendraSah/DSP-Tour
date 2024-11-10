@@ -1,49 +1,134 @@
 package com.example.dsptour
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dsptour.databinding.ActivityOrderBinding // Import the generated binding class
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.firestore.FirebaseFirestore
 
 class OrderActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityOrderBinding // Declare the binding variable
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var recyclerView: RecyclerView
     private lateinit var orderAdapter: OrderAdapter
-    private lateinit var orders: List<Order> // List to hold your orders
+    private val orderList = mutableListOf<OrderItem>()
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navigationView: NavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = ActivityOrderBinding.inflate(layoutInflater) // Inflate the binding
-        setContentView(binding.root) // Set the content view to the binding root
+        setContentView(R.layout.activity_order) // Ensure this matches your layout file
 
-        // Handle system insets
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        // Firestore and RecyclerView Setup
+        firestore = FirebaseFirestore.getInstance()
+        recyclerView = findViewById(R.id.recycler_view_orders)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        orderAdapter = OrderAdapter(orderList) { orderId ->
+            cancelOrder(orderId)
         }
+        recyclerView.adapter = orderAdapter
 
-        // Sample order data (replace this with your actual data)
-        orders = listOf(
-            Order("City Tour", "2024-09-30", "Indra Chowck", "$100"),
-            Order("Temple Tour", "2024-10-01", "Thamel", "$150"),
-            // Add more orders as needed
+        // Fetch orders from Firestore
+        fetchOrders()
+
+        // Initialize Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        // Initialize DrawerLayout and NavigationView
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navigationView = findViewById(R.id.nav_view)
+
+        // Set up Drawer toggle (hamburger icon)
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
 
-        // Set up RecyclerView
-        orderAdapter = OrderAdapter(orders)
-        binding.recyclerViewOrders.adapter = orderAdapter // Use the binding to access RecyclerView
-        binding.recyclerViewOrders.layoutManager = LinearLayoutManager(this)
-
-        // Set back button click listener
-        binding.btnBack.setOnClickListener {
-            onBackPressed() // Navigate back when button is pressed
+        // Handle navigation view item clicks
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    startActivity(Intent(this, HomeActivity::class.java))
+                }
+                R.id.City -> {
+                    startActivity(Intent(this, CityActivity::class.java))
+                }
+                R.id.Temple -> {
+                    startActivity(Intent(this, TempleActivity::class.java))
+                }
+                R.id.Park -> {
+                    startActivity(Intent(this, ParkActivity::class.java))
+                }
+                R.id.setting -> {
+                    startActivity(Intent(this, SettingActivity::class.java))
+                }
+                R.id.Share -> {
+                    val shareIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, "Check out this amazing app!")
+                        type = "text/plain"
+                    }
+                    startActivity(Intent.createChooser(shareIntent, "Share this app with:"))
+                }
+                R.id.logout -> {
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
+            }
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
         }
+
+        // Handle back button to close the navigation drawer if open
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                } else {
+                    finish()
+                }
+            }
+        })
+    }
+
+    private fun fetchOrders() {
+        firestore.collection("booking_requests")
+            .get()
+            .addOnSuccessListener { documents ->
+                orderList.clear()
+                for (document in documents) {
+                    val order = document.toObject(OrderItem::class.java).apply {
+                        id = document.id // Set document ID if needed
+                    }
+                    orderList.add(order)
+                }
+                orderAdapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to fetch orders", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun cancelOrder(orderId: String) {
+        firestore.collection("booking_requests").document(orderId)
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(this, "Order cancelled successfully", Toast.LENGTH_SHORT).show()
+                fetchOrders() // Refresh orders
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to cancel order", Toast.LENGTH_SHORT).show()
+            }
     }
 }

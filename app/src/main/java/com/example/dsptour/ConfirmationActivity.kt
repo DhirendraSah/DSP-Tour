@@ -8,152 +8,138 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class ConfirmationActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var database: FirebaseDatabase
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navigationView: NavigationView
+    private lateinit var firestore: FirebaseFirestore
+    private var listenerRegistration: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_confirmation)
 
-        // Initialize Firebase
-        auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance()
+        // Retrieve data from intent
+        val placeName = intent.getStringExtra("PLACE_NAME")
+        val placePrice = intent.getStringExtra("PLACE_PRICE")
 
-        // Initialize Toolbar
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        // Set text views with received data
+        findViewById<TextView>(R.id.text_destination).text = placeName
+        findViewById<TextView>(R.id.text_price).text = placePrice
 
-        // Initialize DrawerLayout and NavigationView
-        drawerLayout = findViewById(R.id.drawer_layout)
-        navigationView = findViewById(R.id.nav_view)
+        // Initialize Firestore
+        firestore = FirebaseFirestore.getInstance()
 
-        // Set up Drawer toggle (hamburger icon)
-        val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar,
-            R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        )
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        // Handle navigation view item clicks
-        navigationView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.home -> {
-                    Toast.makeText(this, "Home is clicked", Toast.LENGTH_SHORT).show()
-                }
-                R.id.City -> {
-                    startActivity(Intent(this, CityActivity::class.java))
-                }
-                R.id.Temple -> {
-                    startActivity(Intent(this, TempleActivity::class.java))
-                }
-                R.id.Park -> {
-                    startActivity(Intent(this, ParkActivity::class.java))
-                }
-                R.id.setting -> {
-                    startActivity(Intent(this, SettingActivity::class.java))
-                }
-                R.id.Share -> {
-                    val shareIntent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, "Check out this amazing app!")
-                        type = "text/plain"
-                    }
-                    startActivity(Intent.createChooser(shareIntent, "Share this app with:"))
-                }
-                R.id.logout -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                }
-            }
-            drawerLayout.closeDrawer(GravityCompat.START)
-            true
-        }
-
-        // Handle back button to close the navigation drawer if open
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                } else {
-                    finish()
-                }
-            }
-        })
-
-        // Get data from intent
-        val destination = intent.getStringExtra("destination")
-        val price = intent.getStringExtra("price")
-
-        // Set destination and price in the UI
-        findViewById<TextView>(R.id.text_destination).text = destination
-        findViewById<TextView>(R.id.text_price).text = "Price: $$price"
-
-        // Handle Confirm button click
-        val confirmButton = findViewById<Button>(R.id.confirm_button)
-        confirmButton.setOnClickListener {
+        // Confirm button listener
+        findViewById<Button>(R.id.confirm_button).setOnClickListener {
             val selectedDate = findViewById<EditText>(R.id.date_input).text.toString()
             val meetingPointGroup = findViewById<RadioGroup>(R.id.meeting_point_group)
             val selectedMeetingPointId = meetingPointGroup.checkedRadioButtonId
             val meetingPoint = findViewById<RadioButton>(selectedMeetingPointId)?.text.toString()
 
-            // Ensure date and meeting point are selected
+            // Ensure all fields are filled
             if (selectedDate.isNotEmpty() && meetingPoint.isNotEmpty()) {
-                // Save the data to Firebase Realtime Database
-                saveBookingToFirebase(destination, price, selectedDate, meetingPoint)
-
-                // Proceed to PaymentActivity
-                val intent = Intent(this, PaymentActivity::class.java)
-                intent.putExtra("destination", destination)
-                intent.putExtra("price", price)
-                intent.putExtra("date", selectedDate)
-                intent.putExtra("meeting_point", meetingPoint)
-                startActivity(intent)
+                if (isValidDate(selectedDate)) {
+                    // Check if booking with same place and date already exists
+                    firestore.collection("booking_requests")
+                        .whereEqualTo("placeName", placeName)
+                        .whereEqualTo("date", selectedDate)
+                        .get()
+                        .addOnSuccessListener { querySnapshot ->
+                            if (querySnapshot.isEmpty) {
+                                // No duplicate booking, proceed to store booking request
+                                createBookingRequest(placeName, placePrice, selectedDate, meetingPoint)
+                            } else {
+                                // Booking already exists for the same date
+                                Toast.makeText(this, "This date is already taken for the selected place. Please choose another date.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this, "Error checking for existing bookings.", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(this, "Please select a valid date (today or later).", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 Toast.makeText(this, "Please enter all details", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    // Function to save booking details in Firebase Realtime Database
-    private fun saveBookingToFirebase(destination: String?, price: String?, date: String, meetingPoint: String) {
-        val userId = auth.currentUser?.uid ?: return
+    // Function to validate that the date is today or a future date
+    private fun isValidDate(dateString: String): Boolean {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        dateFormat.isLenient = false
+        return try {
+            val selectedDate = dateFormat.parse(dateString)
+            val currentDate = Calendar.getInstance().time
+            selectedDate != null && !selectedDate.before(currentDate)
+        } catch (e: Exception) {
+            false
+        }
+    }
 
-        // Create a booking map with the data
-        val bookingData = hashMapOf(
-            "userId" to userId,
-            "destination" to destination,
-            "price" to price,
+    // Function to create a booking request in Firestore
+    private fun createBookingRequest(placeName: String?, placePrice: String?, date: String, meetingPoint: String) {
+        val bookingRequest = hashMapOf(
+            "placeName" to placeName,
             "date" to date,
-            "meetingPoint" to meetingPoint
+            "meetingPoint" to meetingPoint,
+            "status" to "pending" // Initial status set to pending
         )
 
-        // Get a reference to the "bookings" node in Firebase Realtime Database
-        val bookingsRef = database.getReference("bookings").child(userId).push()
+        // Store booking request in Firestore
+        firestore.collection("booking_requests").add(bookingRequest)
+            .addOnSuccessListener { documentReference ->
+                Toast.makeText(this, "Booking request sent. Awaiting admin approval.", Toast.LENGTH_SHORT).show()
+                // Listen for admin approval or denial
+                listenForAdminApproval(documentReference.id, placeName, placePrice, date, meetingPoint)
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to send booking request.", Toast.LENGTH_SHORT).show()
+            }
+    }
 
-        // Save the booking data under the userId node
-        bookingsRef.setValue(bookingData)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Booking saved successfully", Toast.LENGTH_SHORT).show()
+    // Function to listen for status changes from admin
+    private fun listenForAdminApproval(requestId: String, placeName: String?, placePrice: String?, date: String, meetingPoint: String) {
+        listenerRegistration = firestore.collection("booking_requests").document(requestId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Toast.makeText(this, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    val status = snapshot.getString("status")
+                    when (status) {
+                        "approved" -> {
+                            // Navigate to PaymentActivity if approved
+                            val intent = Intent(this@ConfirmationActivity, PaymentActivity::class.java).apply {
+                                putExtra("destination", placeName)
+                                putExtra("date", date)
+                                putExtra("meeting_point", meetingPoint)
+                                putExtra("price", placePrice)  // Pass the price to PaymentActivity
+                            }
+                            startActivity(intent)
+                            finish() // Close current activity
+                        }
+                        "denied" -> {
+                            // Notify user if booking is denied
+                            Toast.makeText(this@ConfirmationActivity, "Booking denied. Please try another date.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to save booking: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Unregister the listener when activity is destroyed
+        listenerRegistration?.remove()
     }
 }

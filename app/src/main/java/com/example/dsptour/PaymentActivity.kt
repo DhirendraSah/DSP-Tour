@@ -7,13 +7,25 @@ import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestore
 
 class PaymentActivity : AppCompatActivity() {
+
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() // Enables edge-to-edge layout
         setContentView(R.layout.activity_payment)
+
+        // Initialize Firestore
+        firestore = FirebaseFirestore.getInstance()
+
+        // Retrieve data passed from the previous activity (ConfirmationActivity)
+        val destination = intent.getStringExtra("destination")
+        val date = intent.getStringExtra("date")
+        val meetingPoint = intent.getStringExtra("meeting_point")
+        val price = intent.getStringExtra("price")
 
         // Initialize UI elements
         val payButton: Button = findViewById(R.id.btn_pay)
@@ -25,10 +37,10 @@ class PaymentActivity : AppCompatActivity() {
         // Set up click listener for the Pay button
         payButton.setOnClickListener {
             when {
-                paytmCheckBox.isChecked -> processPaytmPayment()
-                phonePayCheckBox.isChecked -> processPhonePayPayment()
-                googlePayCheckBox.isChecked -> processGooglePayPayment()
-                cashOnMeetCheckBox.isChecked -> processCashOnMeetPayment()
+                cashOnMeetCheckBox.isChecked -> processCashOnMeetPayment(destination, date, meetingPoint, price)
+                paytmCheckBox.isChecked -> processPaytmPayment(destination, date, meetingPoint, price)
+                phonePayCheckBox.isChecked -> processPhonePayPayment(destination, date, meetingPoint, price)
+                googlePayCheckBox.isChecked -> processGooglePayPayment(destination, date, meetingPoint, price)
                 else -> {
                     // Show a message if no payment method is selected
                     Toast.makeText(this, "Please select a payment method", Toast.LENGTH_SHORT).show()
@@ -37,39 +49,56 @@ class PaymentActivity : AppCompatActivity() {
         }
     }
 
-    private fun processPaytmPayment() {
-        // Logic for Paytm payment
+    private fun processPaytmPayment(destination: String?, date: String?, meetingPoint: String?, price: String?) {
+        // Logic for Paytm payment (you can integrate Paytm SDK here)
         Toast.makeText(this, "Proceeding with Paytm payment", Toast.LENGTH_SHORT).show()
-        // Simulate payment success (replace with actual SDK integration)
-        redirectToHome()
+        // For demo, simulate a successful payment and store the data in Firestore
+        storePaymentDetails(destination, date, meetingPoint, price, "Paytm")
     }
 
-    private fun processPhonePayPayment() {
-        // Logic for Phone Pay payment
+    private fun processPhonePayPayment(destination: String?, date: String?, meetingPoint: String?, price: String?) {
+        // Logic for Phone Pay payment (you can integrate PhonePe SDK here)
         Toast.makeText(this, "Proceeding with Phone Pay payment", Toast.LENGTH_SHORT).show()
-        // Simulate payment success (replace with actual SDK integration)
-        redirectToHome()
+        // For demo, simulate a successful payment and store the data in Firestore
+        storePaymentDetails(destination, date, meetingPoint, price, "PhonePe")
     }
 
-    private fun processGooglePayPayment() {
-        // Logic for Google Pay payment
+    private fun processGooglePayPayment(destination: String?, date: String?, meetingPoint: String?, price: String?) {
+        // Logic for Google Pay payment (you can integrate Google Pay SDK here)
         Toast.makeText(this, "Proceeding with Google Pay payment", Toast.LENGTH_SHORT).show()
-        // Simulate payment success (replace with actual SDK integration)
-        redirectToHome()
+        // For demo, simulate a successful payment and store the data in Firestore
+        storePaymentDetails(destination, date, meetingPoint, price, "Google Pay")
     }
 
-    private fun processCashOnMeetPayment() {
+    private fun processCashOnMeetPayment(destination: String?, date: String?, meetingPoint: String?, price: String?) {
         // Logic for Cash on Meet payment
         Toast.makeText(this, "Proceeding with Cash on Meet", Toast.LENGTH_SHORT).show()
-        // Simulate payment success (replace with actual confirmation)
-        redirectToHome()
+        // For Cash on Meet, directly store the data in Firestore
+        storePaymentDetails(destination, date, meetingPoint, price, "Cash on Meet")
     }
 
-    private fun redirectToHome() {
-        // Start HomeActivity after successful payment
-        val intent = Intent(this, HomeActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Clear activity stack
-        startActivity(intent)
-        finish() // Close the PaymentActivity if needed
+    private fun storePaymentDetails(destination: String?, date: String?, meetingPoint: String?, price: String?, paymentMode: String) {
+        // Store payment details in Firestore
+        val paymentDetails = hashMapOf(
+            "destination" to destination,
+            "date" to date,
+            "meetingPoint" to meetingPoint,
+            "price" to price,
+            "paymentMode" to paymentMode,
+            "status" to "Paid" // Update status to "Paid"
+        )
+
+        firestore.collection("booking_requests")
+            .add(paymentDetails)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Booking confirmed and payment recorded.", Toast.LENGTH_SHORT).show()
+                // Optionally navigate to another activity (e.g., Thank You page)
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
+                finish() // Close the current activity
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to process payment. Please try again.", Toast.LENGTH_SHORT).show()
+            }
     }
 }

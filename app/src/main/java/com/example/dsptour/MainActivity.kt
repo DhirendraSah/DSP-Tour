@@ -44,8 +44,7 @@ class MainActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString().trim()
 
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Username and password are required", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Username and password are required", Toast.LENGTH_SHORT).show()
             } else {
                 signInUser(username, password)
             }
@@ -56,29 +55,18 @@ class MainActivity : AppCompatActivity() {
             val email = usernameEditText.text.toString().trim()
 
             if (email.isEmpty()) {
-                Toast.makeText(this, "Please enter your registered email", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Please enter your registered email", Toast.LENGTH_SHORT).show()
             } else {
-                // Send password reset email
                 auth.sendPasswordResetEmail(email)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            Toast.makeText(
-                                this,
-                                "Password reset email sent to $email",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            Toast.makeText(this, "Password reset email sent to $email", Toast.LENGTH_LONG).show()
                         } else {
-                            Toast.makeText(
-                                this,
-                                "Failed to send reset email: ${task.exception?.message}",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            Toast.makeText(this, "Failed to send reset email: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                         }
                     }
             }
         }
-
 
         // Sign Up Link Click Listener
         signUpLink.setOnClickListener {
@@ -93,13 +81,19 @@ class MainActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     if (user != null) {
-                        // User is signed in, redirect to HomeActivity
                         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
 
-                        // Redirect to HomeActivity
-                        val intent = Intent(this@MainActivity, HomeActivity::class.java)
-                        startActivity(intent)
-                        finish() // Optional: Call finish() to close the MainActivity
+                        // Check if the user is the admin
+                        if (email == "dsah756@rku.ac.in" && password == "dhirendra") {
+                            // Redirect to AdminActivity
+                            val intent = Intent(this@MainActivity, AdminActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            // Redirect to HomeActivity
+                            val intent = Intent(this@MainActivity, HomeActivity::class.java)
+                            startActivity(intent)
+                        }
+                        finish() // Close MainActivity
                     }
                 } else {
                     Toast.makeText(

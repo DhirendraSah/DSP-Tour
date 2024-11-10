@@ -29,7 +29,7 @@
     <string name="park_activity_content">Park Activity Content</string>
 
 
-    <string name="explore_our_nepal_with_your_beautiful_journey">Explore Our Nepal With Your Beautiful Journey</string>
+    <string name="explore_our_nepal_with_your_beautiful_journey">Explore Our Nepal With Your Beautiful </string>
     <string name="kathmandu">Kathmandu</string>
     <string name="price_100">Price: Rs.1500</string>
     <string name="book_now">Book Now</string>
@@ -77,8 +77,6 @@
     <string name="tell_us_about_yourself_bio">Tell us about yourself (Bio)</string>
     <string name="save">Save</string>
     <string name="booking_confirmation_details">Booking Confirmation Details</string>
-    <string name="destination">Destination</string>
-    <string name="price">Price</string>
     <string name="select_date">Select Date</string>
     <string name="enter_date">Enter Date</string>
     <string name="meeting_point2">Meeting Point</string>
@@ -101,7 +99,29 @@
     <string name="save_language">Save Language</string>
     <string name="your_order_details">Your Order Details</string>
     <string name="back">Back</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="Logout">Logout\n</string>
+    <string name="admin_panel">Admin Panel</string>
+    <string name="pick_image">Pick Image</string>
+    <string name="add_place_image">Add Place Image</string>
+    <string name="enter_place_name">Enter Place Name</string>
+    <string name="enter_price">Enter Price</string>
+    <string name="select_category">Select Category</string>
+    <string name="city">City</string>
+    <string name="temple">Temple</string>
+    <string name="park">Park</string>
+    <string name="other">Other</string>
+    <string name="add_place">Add Place</string>
+    <string name="View">View Places</string>
+    <string name="journey">Journey</string>
+    <string name="comment">Comment</string>
+    <string name="share">Share</string>
+    <string name="like">Like</string>
 
+    <string name="destination">Destination</string>
+    <string name="price">Price</string>
+    <string name="approved">Approved</string>
+    <string name="enter_description">Enter description about place</string>
 
 
 </resources>

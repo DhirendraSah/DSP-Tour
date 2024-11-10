@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/text_place_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Place Name"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date" />
+
+        <TextView
+            android:id="@+id/text_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price" />
+
+        <TextView
+            android:id="@+id/text_meeting_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Meeting Point" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/text_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/approved"
+                android:visibility="gone"
+                android:textColor="@android:color/holo_green_dark"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/icon_ok"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="40dp"
+                android:src="@drawable/ic_confirm" /> <!-- Replace with your OK icon -->
+
+
+            <ImageView
+                android:id="@+id/icon_cancel"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_cancel" /> <!-- Replace with your Cancel icon -->
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
