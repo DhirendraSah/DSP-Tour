@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- EditText for Comment -->
+    <EditText
+        android:id="@+id/edit_comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Add a comment"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="56dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Post Comment Icon -->
+    <ImageView
+        android:id="@+id/button_post_comment"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_send"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="363dp"
+        tools:layout_editor_absoluteY="-3dp" />  <!-- Replace with your icon -->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

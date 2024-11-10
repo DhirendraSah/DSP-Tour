@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ShowIn="navigation_view">
+    <group android:checkableBehavior="single">
+    <item
+        android:id="@+id/nav_dashboard"
+        android:title="@string/dashboard"
+        android:icon="@drawable/baseline_dashboard" />
+
+    <item
+        android:id="@+id/nav_logout"
+        android:title="@string/Logout"
+        android:icon="@drawable/baseline_logout_24" />
+
+        <item
+            android:id="@+id/nav_viewPlace"
+            android:title="@string/View"
+            android:icon="@drawable/place"
+             />
+        <item
+            android:id="@+id/nav_confirm"
+            android:title="@string/confirm"
+            android:icon="@drawable/confirmation"
+            />
+    </group>
+</menu>

@@ -1,0 +1,99 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    android:elevation="4dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Place Image -->
+        <ImageView
+            android:id="@+id/image_place"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop" />
+
+        <!-- Place Name -->
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingTop="8dp" />
+
+        <!-- Place Price -->
+        <TextView
+            android:id="@+id/text_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:paddingTop="4dp"
+            android:textColor="@color/colorPrimary" />
+
+
+
+        <!-- Action Buttons: Like, Comment, Share -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/button_like"
+                android:layout_width="0dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/like2"
+                android:contentDescription="@string/like"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                app:tint="@color/black" />
+
+            <ImageButton
+                android:id="@+id/button_comment"
+                android:layout_width="0dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_comment"
+                android:contentDescription="@string/comment"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                app:tint="@color/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/button_share"
+                android:layout_width="0dp"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/baseline_share_24"
+                android:contentDescription="@string/share"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                app:tint="@color/colorPrimary" />
+        </LinearLayout>
+
+        <!-- Book Place Button -->
+        <Button
+            android:id="@+id/button_book_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Book Place"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/colorPrimary"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
